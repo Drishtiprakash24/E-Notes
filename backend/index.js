@@ -2,10 +2,15 @@ const path = require('path');
 
 require("dotenv").config();
 
-const config = require("./config.json");
+const config = require("./config");
 const mongoose = require("mongoose");
 
-mongoose.connect(config.connectionString);
+
+const { MONGODB_URI } = process.env;
+
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const User = require("./models/user.model");
 const Note = require("./models/note.model");
