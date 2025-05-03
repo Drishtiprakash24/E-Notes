@@ -1,9 +1,5 @@
 const path = require('path');
-//Serve frontend
-app.use(express.static(path.join(__dirname,'../frontend/build','index.html')));
-app.get('*',(req,res)=>{
-    res.sendFile(path.resolve(__dirname,'../frontend/build','index.html'));
-});
+
 require("dotenv").config();
 
 const config = require("./config.json");
@@ -20,6 +16,7 @@ const app=express();
 
 const jwt = require("jsonwebtoken");
 const { authenticateToken } = require("./utilities");
+
 
 app.use(express.json());
 
@@ -311,6 +308,16 @@ app.get("/search-notes/",authenticateToken,async(req,res)=>{
         });
     }
 })
+
+//Serve frontend
+// Serve Vite's build folder
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// Fallback for SPA routing
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+});
+
 
 app.listen(8000);
 module.exports=app;
